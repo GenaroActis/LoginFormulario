@@ -68,7 +68,7 @@ export const loginUserController = async (req, res, next) =>{
                 req.session.cartId = createCart._id
                 req.session.userData = validate
             }
-        -+    res.status(304).redirect('/products');
+        res.status(304).redirect('/products');
         } 
     } catch (error) {
         next(error)
