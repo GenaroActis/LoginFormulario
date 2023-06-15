@@ -6,8 +6,12 @@ const prodDao = new ProductsDaoMongoDB();
 export const getCartController = async (req, res, next) =>{
     try {
         const cartId = req.session.cartId;
-        const cart = await cartDao.getCart(cartId);
-        res.render('carts', {cart});
+        if(!cartId){ 
+            res.redirect('/views/login')
+        }else{
+            const cart = await cartDao.getCart(cartId);
+            res.render('carts', {cart});
+        }
     } catch (error) {
         next(error)
     };

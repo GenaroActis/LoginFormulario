@@ -8,20 +8,24 @@ export const getAllProductsController = async (req, res, next) =>{
         const nextLink = allProducts.hasNextPage ? `http://localhost:8080/products?page=${allProducts.nextPage}` : null
         const prevLink = allProducts.hasPrevPage ? `http://localhost:8080/products?page=${allProducts.prevPage}` : null
         const userData = req.session.userData
-        const productsFile = {
-            results: allProducts.docs,
-            userData: userData,
-            info: {
-                count: allProducts.totalDocs,
-                pages: allProducts.totalPages,
-                actualPage: allProducts.page,
-                hasPrevPage: allProducts.hasPrevPage,
-                hasNextPage: allProducts.hasNextPage,
-                nextPageLink: nextLink,
-                prevPageLink: prevLink
-            }
-        };
-        res.render('products', {productsFile});
+        if(!userData){
+            res.redirect('/views/login')
+        }else{
+            const productsFile = {
+                results: allProducts.docs,
+                userData: userData,
+                info: {
+                    count: allProducts.totalDocs,
+                    pages: allProducts.totalPages,
+                    actualPage: allProducts.page,
+                    hasPrevPage: allProducts.hasPrevPage,
+                    hasNextPage: allProducts.hasNextPage,
+                    nextPageLink: nextLink,
+                    prevPageLink: prevLink
+                }
+            };
+            res.render('products', {productsFile});
+        }
     } catch (error) {
         next(error)
     };
